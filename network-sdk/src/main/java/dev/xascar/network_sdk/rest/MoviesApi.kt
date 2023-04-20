@@ -1,6 +1,7 @@
 package dev.xascar.network_sdk.rest
 
 import dev.xascar.network_sdk.model.MoviesResponse
+import dev.xascar.network_sdk.model.details.DetailsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -19,7 +20,7 @@ interface MoviesApi{
     suspend fun getUpcomingMovies(
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String = LANGUAGE,
-        @Query("page") page: Int = PAGE): Response<MoviesResponse>
+        @Query("page") page: Int): Response<MoviesResponse>
 
     @GET(POPULAR)
     suspend fun getPopularMovies(
@@ -32,7 +33,7 @@ interface MoviesApi{
      suspend fun getMovieDetails(
         @Path(ID) id: Int = 502356,
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("language") language: String = LANGUAGE): Response<MoviesResponse>
+        @Query("language") language: String = LANGUAGE): Response<DetailsResponse>
 
     companion object{
 

@@ -48,6 +48,18 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        baseContext.registerReceiver()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        baseContext.unregisterReceiver()
+
+    }
+
 }
 
 @Composable
