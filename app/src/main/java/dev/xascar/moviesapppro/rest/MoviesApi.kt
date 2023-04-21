@@ -1,7 +1,8 @@
-package dev.xascar.network_sdk.rest
+package dev.xascar.moviesapppro.rest
 
 import dev.xascar.network_sdk.model.MoviesResponse
 import dev.xascar.network_sdk.model.details.DetailsResponse
+import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,37 +18,25 @@ import retrofit2.http.Query
 
 interface MoviesApi{
     // URL, Retrofit, Interface
+
     /**
-     * First implementation, verbose
+     * For RxJava implementation:
      */
-    @GET(NOW_PLAYING_ENDPOINT)
-     suspend fun getNowPlaying(
-        @Query("api_key") apiKey: String = API_KEY,
-        @Query("language") language: String = LANGUAGE,
-        @Query("page") page: Int = PAGE
-     ): Response<MoviesResponse>
 
-    @GET(UPCOMING_ENDPOINT)
-    suspend fun getUpcomingMovies(
-        @Query("api_key") apiKey: String = API_KEY,
+    @GET(CATEGORY_PATH)
+    suspend fun getMoviesDynamic(
+        @Path("category") category: String,
+        @Query("page") page: Int,
         @Query("language") language: String = LANGUAGE,
-        @Query("page") page: Int = PAGE
+        @Query("api_key") apiKey: String = API_KEY
     ): Response<MoviesResponse>
 
-    @GET(POPULAR_ENDPOINT)
-    suspend fun getPopularMovies(
-        @Query("api_key") apiKey: String = API_KEY,
+    @GET(DETAILS_PATH)
+    fun getMovieDetailsRxJava(
+        @Path("movie_id") id: String, //502356
         @Query("language") language: String = LANGUAGE,
-        @Query("page") page: Int = PAGE
-    ): Response<MoviesResponse>
-
-
-     @GET(DETAILS_PATH)
-     suspend fun getMovieDetails(
-         @Path("movie_id") id: Int = 502356,
-         @Query("api_key") apiKey: String = API_KEY,
-         @Query("language") language: String = LANGUAGE): Response<DetailsResponse>
-
+        @Query("api_key") apiKey: String = API_KEY
+    ): Single<DetailsResponse>
 
     companion object{
 
@@ -58,10 +47,10 @@ interface MoviesApi{
         private const val POPULAR_ENDPOINT = "popular"
 
         private const val DETAILS_PATH = "{movie_id}"
+        private const val CATEGORY_PATH = "{category}"
 
         private const val API_KEY = "2e7f73a4d6f04aba739e7dc139e2aa78"
         private const val LANGUAGE = "en-EN"
-        private const val PAGE = 1
 
 
 

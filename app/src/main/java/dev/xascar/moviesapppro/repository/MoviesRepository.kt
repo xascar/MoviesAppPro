@@ -1,6 +1,12 @@
 package dev.xascar.moviesapppro.repository
 
+import dev.xascar.moviesapppro.domain.MovieDomain
+import dev.xascar.moviesapppro.utils.ResultState
+import dev.xascar.network_sdk.model.MoviesResponse
+import dev.xascar.network_sdk.model.details.DetailsResponse
 import dev.xascar.network_sdk.utils.DataState
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Response
@@ -8,12 +14,19 @@ import retrofit2.Response
 interface MoviesRepository {
 
     val movies: StateFlow<DataState>
+    //val details: BehaviorSubject<DetailsResponse>
 
-    fun getMovies(page: Int)
+    /**
+     * Network calls from the sdk
+     */
+    fun getMovies(page: Int = 1)
 
-    fun getPopularMovies(page: Int): Flow<StateFlow<DataState>>
-    fun getUpcomingMovies(): StateFlow<DataState>
-    fun getNowPlayingMovies(): StateFlow<DataState>
-    fun getMovieDetails(): Flow<DataState>
+    /**
+     * Network calls from the sdk using RxJava
+     */
+    fun getPopularMovies(page: Int = 1): Flow<ResultState<List<MovieDomain>>>
+    fun getUpcomingMovies(page: Int = 1): Flow<ResultState<List<MovieDomain>>>
+    fun getNowPlayingMovies(page: Int = 1): Flow<ResultState<List<MovieDomain>>>
+    fun getMovieDetails(movieId: String): Single<DetailsResponse>
 
 }

@@ -55,13 +55,6 @@ dependencies {
     //Network interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6")
 
-    // RxJava
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-
-    //Adapter for switching the response into a Single for rxjava
-    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
-
 
 
     testImplementation 'junit:junit:4.13.2'
