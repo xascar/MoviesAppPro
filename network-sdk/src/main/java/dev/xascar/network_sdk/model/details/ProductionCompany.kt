@@ -3,6 +3,7 @@ package dev.xascar.network_sdk.model.details
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class ProductionCompany(
@@ -14,4 +15,4 @@ data class ProductionCompany(
     val name: String? = null,
     @Json(name = "origin_country")
     val originCountry: String? = null
-)
+): Serializable

@@ -3,6 +3,7 @@ package dev.xascar.network_sdk
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
 import androidx.core.content.ContextCompat.registerReceiver
 import dev.xascar.network_sdk.model.MoviesResponse
 import dev.xascar.network_sdk.model.Result
@@ -37,10 +38,7 @@ interface NetworkApi {
     fun getMovieDetails(id: Int, movieDetails: MovieDetailsCallback)
 }
 
-class NetworkApiImpl @Inject constructor(
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val coroutineScope: CoroutineScope = CoroutineScope(ioDispatcher)
-): NetworkApi, CoroutineScope by coroutineScope{
+class NetworkApiImpl @Inject constructor(): NetworkApi, CoroutineScope by CoroutineScope(Dispatchers.IO) {
 
     @Inject
     lateinit var moviesApi: MoviesApi
@@ -72,7 +70,7 @@ class NetworkApiImpl @Inject constructor(
             val response = moviesApi.getPopularMovies(page = page)
             if (response.isSuccessful){
                 response.body()?.let {
-                    emit(DataState.SUCCESS(it.results))
+                    emit(DataState.SUCCESS(it))
                 } ?: throw Exception("Empty response")
             }else{
                 throw Exception(response.errorBody()?.string())
@@ -86,9 +84,11 @@ class NetworkApiImpl @Inject constructor(
             val response = moviesApi.getUpcomingMovies(page = page)
             if (response.isSuccessful){
                 response.body()?.let {
-                    DataState.SUCCESS(it.results)
+                    Log.d("TAG", "getUpcoming(Success): ${it.results}")
+                    DataState.SUCCESS(it)
                 } ?: throw Exception("Empty response")
             }else{
+                Log.d("TAG", "getUpcoming(Error): ${response.errorBody()?.string()}")
                 throw Exception(response.errorBody()?.string())
             }
         }catch (e: Exception){

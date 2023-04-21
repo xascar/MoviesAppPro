@@ -3,6 +3,7 @@ package dev.xascar.network_sdk.model.details
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class SpokenLanguage(
@@ -12,4 +13,4 @@ data class SpokenLanguage(
     val iso6391: String? = null,
     @Json(name = "name")
     val name: String? = null
-)
+): Serializable

@@ -23,12 +23,12 @@ class MoviesViewModel @Inject constructor(
     val moviesUIState = repository.movies.value
 
     init {
-        getMovies()
+        getMovies(1)
     }
 
-    private fun getMovies(){
+    private fun getMovies(page: Int){
 
-        repository.getMovies()
+        repository.getMovies(page)
 
     }
 

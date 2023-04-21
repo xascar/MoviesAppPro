@@ -3,6 +3,7 @@ package dev.xascar.network_sdk.model.details
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class DetailsResponse(
@@ -56,4 +57,4 @@ data class DetailsResponse(
     val voteAverage: Double? = null,
     @Json(name = "vote_count")
     val voteCount: Int? = null
-)
+): Serializable

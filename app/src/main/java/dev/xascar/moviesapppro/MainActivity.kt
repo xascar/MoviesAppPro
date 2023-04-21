@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
 import dev.xascar.moviesapppro.ui.theme.MoviesAppProTheme
-import dev.xascar.moviesapppro.utils.DataState
+import dev.xascar.network_sdk.utils.DataState
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -32,16 +32,17 @@ class MainActivity : ComponentActivity() {
                 ) {
                     when(list){
                         is DataState.LOADING ->{
-
+                            Greeting("Waiting for info...")
                         }
                         is DataState.SUCCESS ->{
 
-                            for (item in list.response!!){
+                            for (item in list.response?.results!!){
                                 Greeting("${item?.title}")
                             }
+
                         }
                         is DataState.ERROR ->{
-
+                            Greeting("${list.error.message}")
                         }
                     }
                 }
@@ -51,12 +52,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        baseContext.registerReceiver()
+        //baseContext.registerReceiver()
     }
 
     override fun onStop() {
         super.onStop()
-        baseContext.unregisterReceiver()
+        //baseContext.unregisterReceiver()
 
     }
 
