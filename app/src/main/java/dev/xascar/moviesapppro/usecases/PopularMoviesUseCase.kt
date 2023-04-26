@@ -1,10 +1,15 @@
 package dev.xascar.moviesapppro.usecases
 
-import dev.xascar.moviesapppro.domain.MovieDomain
+import dev.xascar.moviesapppro.data.model.DomainMovie
+import dev.xascar.moviesapppro.database.LocalRepository
 import dev.xascar.moviesapppro.repository.MoviesRepository
 import dev.xascar.moviesapppro.utils.ResultState
+import dev.xascar.network_sdk.AppUseCase
+import dev.xascar.network_sdk.NetworkApi
+import dev.xascar.network_sdk.utils.MovieCategory
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
 /**
  *  Are part of the domain layer
@@ -22,13 +27,47 @@ import kotlinx.coroutines.flow.collect
  */
 //todo Create a generic use case (PopularMoviesUseCase extends from GenericUseCase)
 //todo implement TypeAliases with use cases
-class PopularMoviesUseCase(private val moviesRepository: MoviesRepository) {
+class PopularMoviesUseCase @Inject constructor(
+    private val moviesRepository: MoviesRepository,
+private val localRepository: LocalRepository,
+private val networkApi: NetworkApi
+                           ): AppUseCase<ResultState<List<DomainMovie>>> {
 
-//    operator fun invoke(page: Int): Flow<ResultState<List<MovieDomain>>> {
-////        moviesRepository.getPopularMovies(page).collect{
-////
-////        }
-//
-//    }
+    override operator fun invoke(arguments: Any?): Flow<ResultState<List<DomainMovie>>> = flow {
+        if (networkApi.checkNetworkState()){
+            try{
+                arguments?.let {
+                    moviesRepository.getPopularMovies(it as Int).collect{ state ->
+                        if (state is ResultState.Success){
+                            state.response.let { listMovieDomain ->
+                                localRepository.insertMovies(listMovieDomain)
+                            }
+                            localRepository.getAllMoviesByType(MovieCategory.POPULAR).collect{ movieListDomain ->
+                                emit(ResultState.Success(movieListDomain))
+                            }
+
+                        } else {
+                            emit(state)
+                        }
+
+                    }
+                }
+
+            }catch (e: Exception){
+                emit(ResultState.Error(e))
+            }
+        }else {
+            localRepository.getAllMoviesByType(MovieCategory.POPULAR).collect{ movieListDomain ->
+                if (movieListDomain.isNotEmpty()){
+                    emit(ResultState.Success(movieListDomain))
+                }
+                else{
+                    emit(ResultState.Error(Exception("No")))
+
+                }
+            }
+        }
+
+    }
 
 }

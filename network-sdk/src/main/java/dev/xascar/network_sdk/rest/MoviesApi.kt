@@ -24,27 +24,27 @@ interface MoviesApi{
      suspend fun getNowPlaying(
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String = LANGUAGE,
-        @Query("page") page: Int = PAGE
+        @Query("page") page: Int
      ): Response<MoviesResponse>
 
     @GET(UPCOMING_ENDPOINT)
     suspend fun getUpcomingMovies(
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String = LANGUAGE,
-        @Query("page") page: Int = PAGE
+        @Query("page") page: Int
     ): Response<MoviesResponse>
 
     @GET(POPULAR_ENDPOINT)
     suspend fun getPopularMovies(
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String = LANGUAGE,
-        @Query("page") page: Int = PAGE
+        @Query("page") page: Int
     ): Response<MoviesResponse>
 
 
      @GET(DETAILS_PATH)
      suspend fun getMovieDetails(
-         @Path("movie_id") id: Int = 502356,
+         @Path("movie_id") id: Int,
          @Query("api_key") apiKey: String = API_KEY,
          @Query("language") language: String = LANGUAGE): Response<DetailsResponse>
 
@@ -61,7 +61,6 @@ interface MoviesApi{
 
         private const val API_KEY = "2e7f73a4d6f04aba739e7dc139e2aa78"
         private const val LANGUAGE = "en-EN"
-        private const val PAGE = 1
 
 
 

@@ -5,15 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import dagger.hilt.android.AndroidEntryPoint
+import dev.xascar.moviesapppro.data.model.DomainMovie
 import dev.xascar.moviesapppro.ui.theme.MoviesAppProTheme
-import dev.xascar.network_sdk.utils.DataState
+import kotlinx.coroutines.flow.StateFlow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -25,26 +31,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             MoviesAppProTheme {
                 // A surface container using the 'background' color from the theme
-                val list = viewModel.moviesUIState
+                val list = viewModel.popular.observe(this){
+
+                }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    when(list){
-                        is DataState.LOADING ->{
-                            Greeting("Waiting for info...")
-                        }
-                        is DataState.SUCCESS ->{
-
-                            for (item in list.response?.results!!){
-                                Greeting("${item?.title}")
-                            }
-
-                        }
-                        is DataState.ERROR ->{
-                            Greeting("${list.error.message}")
-                        }
-                    }
+                    val moviesViewModel: MoviesViewModel = hiltViewModel()
+                    PlayingNowScreen(moviesViewModel.playingNow)
                 }
             }
         }
@@ -61,6 +56,23 @@ class MainActivity : ComponentActivity() {
 
     }
 
+}
+
+@Composable
+fun PlayingNowScreen(data: StateFlow<PagingData<DomainMovie>>) {
+    val movies = data.collectAsLazyPagingItems()
+
+    LazyColumn {
+        items(items = movies) {movie ->
+            MovieItem(movie)
+        }
+    }
+
+}
+
+@Composable
+fun MovieItem(movie: DomainMovie?) {
+    TODO("Not yet implemented")
 }
 
 @Composable

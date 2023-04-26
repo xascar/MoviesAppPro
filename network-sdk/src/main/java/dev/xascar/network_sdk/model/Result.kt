@@ -12,7 +12,7 @@ data class Result(
     @Json(name = "backdrop_path")
     val backdropPath: String? = null,
     @Json(name = "genre_ids")
-    val genreIds: List<Int?>? = null,
+    val genreIds: List<Int>? = null,
     @Json(name = "id")
     val id: Int? = null,
     @Json(name = "original_language")

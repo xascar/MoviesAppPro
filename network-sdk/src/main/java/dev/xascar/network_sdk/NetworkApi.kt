@@ -1,24 +1,18 @@
 package dev.xascar.network_sdk
 
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
-import androidx.core.content.ContextCompat.registerReceiver
-import dev.xascar.network_sdk.model.MoviesResponse
-import dev.xascar.network_sdk.model.Result
 import dev.xascar.network_sdk.rest.MoviesApi
 import dev.xascar.network_sdk.utils.DataState
 import dev.xascar.network_sdk.utils.MovieDetailsCallback
 import dev.xascar.network_sdk.utils.NowPlayingMoviesBroadcast
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import retrofit2.Response
-import java.lang.Exception
 import javax.inject.Inject
 
 interface NetworkApi {
@@ -34,8 +28,10 @@ interface NetworkApi {
      *  The response will be returned in the broadcast receiver
      *  NowPlaying Movies receiver
      */
-    fun getNowPlaying()//todo min 55
+    fun getNowPlaying(page: Int)//todo min 55
     fun getMovieDetails(id: Int, movieDetails: MovieDetailsCallback)
+
+    fun checkNetworkState(): Boolean
 }
 
 class NetworkApiImpl @Inject constructor(): NetworkApi, CoroutineScope by CoroutineScope(Dispatchers.IO) {
@@ -95,13 +91,13 @@ class NetworkApiImpl @Inject constructor(): NetworkApi, CoroutineScope by Corout
             DataState.ERROR(e)
         }
     }
-    override fun getNowPlaying() {
+    override fun getNowPlaying(page: Int) {
         if (isInitialized){
 
             launch {
 
                 try {
-                    val response = moviesApi.getNowPlaying()
+                    val response = moviesApi.getNowPlaying(page = page)
                     if (response.isSuccessful){
                         response.body()?.let {
                             context.sendBroadcast(NowPlayingMoviesBroadcast.getIntent(data = it))
@@ -136,6 +132,14 @@ class NetworkApiImpl @Inject constructor(): NetworkApi, CoroutineScope by Corout
                 movieDetails.onError(e)
             }
         }
+    }
+
+    override fun checkNetworkState(): Boolean {
+        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return manager.activeNetwork?.let {
+            manager.getNetworkCapabilities(it)
+                ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } ?: false
     }
 
 }

@@ -17,7 +17,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 class LocalRepositoryModule  {
 
     @Provides
-    fun provideFootBallAPI(): MoviesApi{
+    fun providesMoviesService(): MoviesApi{
         val qatarApi: MoviesApi by lazy {
             Retrofit.Builder()
                 .baseUrl(BASE_URL)

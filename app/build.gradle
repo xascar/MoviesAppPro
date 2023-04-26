@@ -88,6 +88,27 @@ dependencies {
     // OkHttp Logging Interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6'
 
+    //Room database
+    def room_version = "2.5.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // ktx artifact dependency from Room to use Coroutine features
+    implementation "androidx.room:room-ktx:$room_version"
+
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt "androidx.room:room-compiler:$room_version"
+
+
+    //Paging
+    implementation "androidx.paging:paging-compose:1.0.0-alpha18"
+
+    // To use hilt viewModel
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')

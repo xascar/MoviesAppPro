@@ -1,20 +1,18 @@
 package dev.xascar.moviesapppro.utils
 
-import dev.xascar.moviesapppro.domain.mapToDomainMovie
 import dev.xascar.network_sdk.model.MoviesResponse
 import dev.xascar.network_sdk.utils.MovieCategory
 import dev.xascar.network_sdk.utils.toLowerCase
 import retrofit2.Response
 
 //todo Call boilerplate code in this function
- fun makeRetrofitCall(
+//fun makeRetrofitCall(
 //
 //
-suspendFunction: () -> Unit
+//suspendFunction: () -> Unit
 //success: () -> Unit,
 //error: (Any) -> Unit,
-){
-
+//){
 //    try{
 //
 //        val response = localService.getMoviesDynamic(
@@ -35,5 +33,4 @@ suspendFunction: () -> Unit
 //    }catch (e: Exception){
 //        error(ResultState.Error(e))
 //    }
-
-}
+//}

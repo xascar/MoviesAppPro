@@ -4,6 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dev.xascar.moviesapppro.database.LocalRepository
+import dev.xascar.moviesapppro.database.LocalRepositoryImpl
 import dev.xascar.moviesapppro.repository.MoviesRepository
 import dev.xascar.moviesapppro.repository.MoviesRepositoryImpl
 import dev.xascar.network_sdk.NetworkApi
@@ -18,5 +20,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun provideNetworkApi(service: NetworkApiImpl): NetworkApi
+
+    @Binds
+    abstract fun provideLocalRepository(localRepository: LocalRepositoryImpl): LocalRepository
 
 }
