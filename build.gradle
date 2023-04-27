@@ -8,3 +8,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
 
 }
+// To accept the gradle enterprise agreement for publishing the dependencies tree
+//gradleEnterprise {
+//    buildScan {
+//        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+//        termsOfServiceAgree = "yes"
+//    }
+//}

@@ -81,7 +81,7 @@ class MoviesViewModel @Inject constructor(
      */
     private fun getMovies(movieCategory: MovieCategory, page: Int){
         when (movieCategory){
-            MovieCategory.POPULAR -> getPopular()
+            MovieCategory.POPULAR -> getPopular(page)
             MovieCategory.NOW_PLAYING -> getPlayingNow()
             MovieCategory.UPCOMING -> TODO("Not yet implemented")
 
@@ -99,9 +99,9 @@ class MoviesViewModel @Inject constructor(
      * Post value: Assign the value either a background or main thread (whenever is available)
      * Set value: Assign the value in the main thread which means its value is immediately available
      */
-    private fun getPopular() {
+    private fun getPopular(page: Int) {
         viewModelScope.launch {
-            popularMoviesUseCase.invoke(1).collect{
+            popularMoviesUseCase.invoke(page).collect{
                 _popular.postValue(it)
             }
 

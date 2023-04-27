@@ -100,9 +100,34 @@ dependencies {
     // To use Kotlin annotation processing tool (kapt)
     kapt "androidx.room:room-compiler:$room_version"
 
-
+    /**
+     * every time I add  this dependency implementation "androidx.paging:paging-compose:1.0.0-alpha18"
+     * it brings me this error: Duplicate class kotlin.collections.jdk8.CollectionsJDK8Kt
+     * found in modules kotlin-stdlib-1.8.0 (org.jetbrains.kotlin:kotlin-stdlib:1.8.0)
+     * and kotlin-stdlib-jdk8-1.7.20 (org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20)
+     *
+     * This error occurs because there is a conflict between the versions of kotlin-stdlib and
+     * kotlin-stdlib-jdk8 being used in your project. kotlin-stdlib and kotlin-stdlib-jdk8 are
+     * dependencies of androidx.paging:paging-compose:1.0.0-alpha18, and they both contain the
+     * same class kotlin.collections.jdk8.CollectionsJDK8Kt.
+     *
+     * To fix this issue, you can try excluding one of the conflicting dependencies from
+     * androidx.paging:paging-compose:1.0.0-alpha18 and instead use a specific version of
+     * kotlin-stdlib or kotlin-stdlib-jdk8. For example, you can exclude kotlin-stdlib-jdk8 by
+     * adding the following to your build.gradle file:
+     *
+     */
     //Paging
-    implementation "androidx.paging:paging-compose:1.0.0-alpha18"
+    implementation("androidx.paging:paging-compose:1.0.0-alpha18") {
+        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8"
+    }
+
+    /**
+     * Then, you can add a specific version of kotlin-stdlib or kotlin-stdlib-jdk8 to
+     * your dependencies. For example:
+     */
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20"
+
 
     // To use hilt viewModel
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
