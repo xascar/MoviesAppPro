@@ -73,6 +73,10 @@ class MoviesViewModel @Inject constructor(
     var playingNow: MutableStateFlow<PagingData<DomainMovie>> = MutableStateFlow(PagingData.empty())
         private set
 
+    init {
+        getMovies(MovieCategory.NOW_PLAYING,1)
+    }
+
     /**
      * differences between "When" and "switch"
      *      - You can assign it to a variable

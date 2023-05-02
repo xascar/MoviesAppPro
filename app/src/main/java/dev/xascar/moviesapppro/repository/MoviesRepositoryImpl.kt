@@ -107,12 +107,14 @@ class MoviesRepositoryImpl @Inject constructor(
      * this one does not return a value IDK why
      */
     override suspend fun getNowPlayingMovies(page: Int): ResultState<List<DomainMovie>>{
-//        val result = movieApi.getMoviesDynamic(category = MovieCategory.NOW_PLAYING.toLowerCase(),page = page)
-//
-//        result.body()?.let {
-//
-//        }
-        TODO("Not yet implemented")
+        return try {
+            val result = movieApi.getMoviesDynamic(category = MovieCategory.NOW_PLAYING.toLowerCase(),page = page)
+            result.body()?.let {
+                ResultState.Success(it.results.mapToDomainMovie(MovieCategory.NOW_PLAYING))
+            }?: throw Exception("Empty response")
+        }catch (e: Exception){
+            ResultState.Error(e)
+        }
     }
 
     /**
